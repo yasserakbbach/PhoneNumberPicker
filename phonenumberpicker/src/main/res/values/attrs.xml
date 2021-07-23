@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+
+    <declare-styleable name="PhoneNumberPicker">
+        <attr name="textColor" format="color"/>
+        <attr name="outlineBorderColor" format="color"/>
+        <attr name="textSize" format="dimension"/>
+        <attr name="defaultCountry" format="string"/>
+        <attr name="continents">
+            <flag name="africa" value="1"/>
+            <flag name="asia" value="2"/>
+            <flag name="europe" value="4"/>
+            <flag name="north_america" value="8"/>
+            <flag name="south_america" value="16"/>
+            <flag name="oceania" value="32"/>
+            <flag name="all" value="63"/>
+        </attr>
+        <attr name="maxLength" format="integer"/>
+    </declare-styleable>
+
+</resources>

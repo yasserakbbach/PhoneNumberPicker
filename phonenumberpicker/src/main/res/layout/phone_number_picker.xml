@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/phoneNumberLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        tools:startIconDrawable="@drawable/ic_country_flag_ma"
+        app:startIconTint="@null">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLength="14"
+            android:longClickable="false"
+            android:textIsSelectable="false"
+            android:cursorVisible="false"
+            tools:text="@string/morocco_country_code"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>
