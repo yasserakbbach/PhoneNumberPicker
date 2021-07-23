@@ -3,9 +3,9 @@ Phone number picker is an Android library that's built upon the material **TextI
 
 # Features
 -  **All countries**: it has around 220+ country (including some independent ones).
--  **Filter by continents**: you can filter countries by [continent].
--  **Exclude country**: you can exclude countries by their [ISO2 code].
--  **Modern country flags**: the flags used in the library are here [rectangular-rounded-edges].
+-  **Filter by continents**: you can filter countries by [continent](https://en.wikipedia.org/wiki/Continent).
+-  **Exclude country**: you can exclude countries by their [ISO2 code](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes).
+-  **Modern country flags**: the flags used in the library are here [rectangular-rounded-edges](https://www.flaticon.com/packs/international-flags/2?k=1626958303329).
 -  **Full phone number details**: you can extract country name, code and ISO2 easily!
 -  **Full control**: you have the ability to **change default country flag**, **text color and size**, **outline border color** and **max length of digits**.
 -  **Bottom Sheet Dialog**: country list
@@ -89,23 +89,13 @@ fun setMaxLength(maxLength : Int)
 ```
 
 # Special Thanks to:
-- [PhoneNumberKit] for inspiring me to work on **PhoneNumberPicker** library.
-- [Dillinger] for making it easier to create this markup file.
-- [Flagicons] for helping me to verify country flags and get ISO2 codes.
-- [SVG-COMPRESSOR] for compressing SVG files and making them lighter.
-- [FLAG ATTRIBUTES ON ANDROID]
+- [PhoneNumberKit](https://github.com/ibrahimsn98/PhoneNumberKit) for inspiring me to work on **PhoneNumberPicker** library.
+- [Dillinger](https://dillinger.io/) for making it easier to create this markup file.
+- [Flagicons](https://flagicons.lipis.dev/) for helping me to verify country flags and get ISO2 codes.
+- [SVG-COMPRESSOR](https://online-converting.com/svg-optimizer/) for compressing SVG files and making them lighter.
+- [FLAG ATTRIBUTES ON ANDROID](https://medium.com/@JakobUlbrich/flag-attributes-in-android-how-to-use-them-ac4ec8aee7d1)
 
 > Knowledge is weapon
 
 # License
-[MIT]
-
-[continent]: (https://en.wikipedia.org/wiki/Continent)
-[ISO2 code]: (https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes)
-[rectangular-rounded-edges]: (https://www.flaticon.com/packs/international-flags/2?k=1626958303329)
-[MIT]: (https://github.com/yasserakbbach/PhoneNumberPicker/blob/main/LICENSE)
-[Dillinger]: (https://dillinger.io/)
-[Flagicons]: (https://flagicons.lipis.dev/)
-[SVG-COMPRESSOR]: (https://online-converting.com/svg-optimizer/)
-[FLAG ATTRIBUTES ON ANDROID]: (https://medium.com/@JakobUlbrich/flag-attributes-in-android-how-to-use-them-ac4ec8aee7d1)
-[PhoneNumberKit]: (https://github.com/ibrahimsn98/PhoneNumberKit)
+[MIT](https://github.com/yasserakbbach/PhoneNumberPicker/blob/main/LICENSE)
