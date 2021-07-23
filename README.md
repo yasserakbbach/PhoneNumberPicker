@@ -14,17 +14,17 @@ Phone number picker is an Android library that's built upon the material **TextI
 **Step 1.** Add it in your root build.gradle at the end of repositories:
 ```gradle
 allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
-	}
+    repositories {
+	...
+	maven { url 'https://jitpack.io' }
+    }
+}
 ```
 **Step 2.** Add the dependency
 ```gradle
 dependencies {
-	        implementation 'com.github.yasserakbbach:PhoneNumberPicker:1.0.0'
-	}
+	implementation 'com.github.yasserakbbach:PhoneNumberPicker:1.0.0'
+}
 ```
 
 # Demo
@@ -47,7 +47,7 @@ dependencies {
 |```app:outlineBorderColor``` | ```#FF0000``` OR ```@color/red``` |
 |```app:textSize``` | ```18sp``` |
 |```app:defaultCountry``` | ```ma```, ```us```, ```gb``` or other ISO2 code|
-|```app:continents``` | ```all|africa|asia|europe|north_america|south_america|oceania``` |
+|```app:continents``` | ```all|africa|asia|europe|north_america|south_america``` |
 |```app:maxLength``` | ```14``` |
 
 # Methods and properties
