@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="outlineBorderColor">#515151</color>
+    <string name="morocco_country_code">+212</string>
+    <declare-styleable name="PhoneNumberPicker">
+        <attr format="color" name="textColor"/>
+        <attr format="color" name="outlineBorderColor"/>
+        <attr format="dimension" name="textSize"/>
+        <attr format="string" name="defaultCountry"/>
+        <attr name="continents">
+            <flag name="africa" value="1"/>
+            <flag name="asia" value="2"/>
+            <flag name="europe" value="4"/>
+            <flag name="north_america" value="8"/>
+            <flag name="south_america" value="16"/>
+            <flag name="oceania" value="32"/>
+            <flag name="all" value="63"/>
+        </attr>
+        <attr format="integer" name="maxLength"/>
+    </declare-styleable>
+</resources>

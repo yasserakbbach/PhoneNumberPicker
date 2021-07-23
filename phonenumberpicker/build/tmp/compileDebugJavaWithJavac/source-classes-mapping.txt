@@ -1,0 +1,8 @@
+com/yasserakbbach/phonenumberpicker/BuildConfig.java
+ com.yasserakbbach.phonenumberpicker.BuildConfig
+com/yasserakbbach/phonenumberpicker/databinding/CountryListBinding.java
+ com.yasserakbbach.phonenumberpicker.databinding.CountryListBinding
+com/yasserakbbach/phonenumberpicker/databinding/CountryItemBinding.java
+ com.yasserakbbach.phonenumberpicker.databinding.CountryItemBinding
+com/yasserakbbach/phonenumberpicker/databinding/PhoneNumberPickerBinding.java
+ com.yasserakbbach.phonenumberpicker.databinding.PhoneNumberPickerBinding

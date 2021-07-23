@@ -1,0 +1,4 @@
+com/yasserakbbach/phonenumberpicker/BuildConfig.java
+ com.yasserakbbach.phonenumberpicker.BuildConfig
+com/yasserakbbach/phonenumberpicker/databinding/ActivityMainBinding.java
+ com.yasserakbbach.phonenumberpicker.databinding.ActivityMainBinding
