@@ -52,7 +52,7 @@ dependencies {
 
 # Methods and properties
 ```kotlin
-// To get current countries list
+// Get current countries list
 phoneNumber.currentCountries
 
 // Getet full phone number
