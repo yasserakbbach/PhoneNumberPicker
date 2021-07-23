@@ -47,7 +47,7 @@ dependencies {
 |```app:outlineBorderColor``` | ```#FF0000``` OR ```@color/red``` |
 |```app:textSize``` | ```18sp``` |
 |```app:defaultCountry``` | ```ma```, ```us```, ```gb``` or other ISO2 code|
-|```app:continents``` | ```all|africa|asia|europe|north_america|south_america``` |
+|```app:continents``` | ```all/africa/asia/europe/north_america/south_america``` |
 |```app:maxLength``` | ```14``` |
 
 # Methods and properties
