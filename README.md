@@ -9,6 +9,7 @@ Phone number picker is an Android library that's built upon the material **TextI
 -  **Full phone number details**: you can extract country name, code and ISO2 easily!
 -  **Full control**: you have the ability to **change default country flag**, **text color and size**, **outline border color** and **max length of digits**.
 -  **Bottom Sheet Dialog**: country list
+-  **Search**: you can search and filter countries of the bottom sheet list by name.
 
 # Installation
 **Step 1.** Add it in your root build.gradle at the end of repositories:
