@@ -55,7 +55,7 @@ dependencies {
 // Get current countries list
 phoneNumber.currentCountries
 
-// Getet full phone number
+// Get full phone number
 fun getFullPhoneNumber() : String
 
 // Get selected country
