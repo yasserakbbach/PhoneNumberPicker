@@ -1,5 +1,5 @@
 # PhoneNumberPicker [![Build Status](https://jitpack.io/v/yasserakbbach/PhoneNumberPicker.svg)](https://jitpack.io/v/yasserakbbach/PhoneNumberPicker)
-Phone number picker is an Android library that's built upon the material **TextInputLayout** to ease the process of entering/retrieving phone numbers.
+PhoneNumberPicker is an Android library that's built upon the material TextInputLayout with country flags/code/iso2 to ease the process of entering/retrieving phone numbers.
 
 # Features
 -  **All countries**: it has around 220+ country (including some independent ones).
