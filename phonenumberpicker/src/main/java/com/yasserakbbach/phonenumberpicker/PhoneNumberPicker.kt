@@ -10,6 +10,7 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
@@ -40,6 +41,7 @@ class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) :
 
     private var textChangedListener: MaskedTextChangedListener? = null
     private val numberUtils by lazy { FormatNumberUtils(context) }
+    private var phoneChangCallback: ((phone: String) -> Unit)? = null
 
     /**
      * To keep track of the selected country
@@ -267,6 +269,7 @@ class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) :
                             "PHONE",
                             "extractedValue = $extractedValue formattedValue = $formattedValue "
                         )
+                        phoneChangCallback?.invoke(extractedValue)
                     }
                 }
             )
@@ -388,6 +391,18 @@ class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) :
     fun setMaxLength(maxLength: Int) {
 
         binding.phoneNumber.filters = arrayOf(InputFilter.LengthFilter(maxLength))
+    }
+
+    fun setCustomBackground(@DrawableRes backId: Int) {
+        binding.phoneNumber.setBackgroundResource(backId)
+    }
+
+    fun setPhoneChangeCallback(callback: (String) -> Unit) {
+        phoneChangCallback = callback
+    }
+
+    fun removePhoneChangeCallback() {
+        phoneChangCallback = null
     }
 
     companion object {
