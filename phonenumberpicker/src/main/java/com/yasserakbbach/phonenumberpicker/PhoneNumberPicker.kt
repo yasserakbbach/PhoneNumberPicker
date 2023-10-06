@@ -4,16 +4,20 @@ import android.content.Context
 import android.graphics.Color
 import android.text.InputFilter
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.redmadrobot.inputmask.MaskedTextChangedListener
+import com.redmadrobot.inputmask.helper.AffinityCalculationStrategy
 import com.yasserakbbach.phonenumberpicker.databinding.CountryListBinding
 import com.yasserakbbach.phonenumberpicker.databinding.PhoneNumberPickerBinding
 import com.yasserakbbach.phonenumberpicker.models.Country
@@ -21,6 +25,8 @@ import com.yasserakbbach.phonenumberpicker.adapters.CountryAdapter
 import com.yasserakbbach.phonenumberpicker.adapters.OnCountrySelected
 import com.yasserakbbach.phonenumberpicker.models.Continent
 import com.yasserakbbach.phonenumberpicker.utils.CountryFactory
+import com.yasserakbbach.phonenumberpicker.utils.CountryPattern
+import com.yasserakbbach.phonenumberpicker.utils.FormatNumberUtils
 import com.yasserakbbach.phonenumberpicker.utils.disableCopyPaste
 import java.util.*
 
@@ -29,18 +35,23 @@ import java.util.*
  *
  * @author: Yasser AKBBACH
  */
-class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) : LinearLayout(context, attrs),
+class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) :
+    LinearLayout(context, attrs),
     CountryAdapter.Presenter {
+
+    private var textChangedListener: MaskedTextChangedListener? = null
+    private val numberUtils by lazy { FormatNumberUtils(context) }
+    private var phoneChangCallback: ((phone: String) -> Unit)? = null
 
     /**
      * To keep track of the selected country
      */
-    private lateinit var mSelectedCountry : Country
+    private lateinit var mSelectedCountry: Country
 
     /**
      * Reference of the layout to handle the UI changes
      */
-    private val binding : PhoneNumberPickerBinding by lazy {
+    private val binding: PhoneNumberPickerBinding by lazy {
         PhoneNumberPickerBinding.inflate(
             LayoutInflater.from(context), this, false
         )
@@ -72,7 +83,7 @@ class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) : Li
     /**
      * Listener of country selection
      */
-    private var mOnCountrySelected : OnCountrySelected? = null
+    private var mOnCountrySelected: OnCountrySelected? = null
 
     /**
      * To initialize everything
@@ -97,16 +108,21 @@ class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) : Li
 
         context?.withStyledAttributes(attrs, R.styleable.PhoneNumberPicker) {
             val textColor = getColor(R.styleable.PhoneNumberPicker_textColor, DEFAULT_TEXT_COLOR)
-            val borderColor = getColor(R.styleable.PhoneNumberPicker_outlineBorderColor, DEFAULT_OUTLINE_BORDER_COLOR)
-            val textSize = getDimensionPixelSize(R.styleable.PhoneNumberPicker_textSize, DEFAULT_TEXT_SIZE)
-            val defaultCountry = getString(R.styleable.PhoneNumberPicker_defaultCountry) ?: DEFAULT_COUNTRY_KEY
-            val continents = getInteger(R.styleable.PhoneNumberPicker_continents, DEFAULT_CONTINENT_KEY)
+            val borderColor = getColor(
+                R.styleable.PhoneNumberPicker_outlineBorderColor,
+                DEFAULT_OUTLINE_BORDER_COLOR
+            )
+            val textSize =
+                getDimensionPixelSize(R.styleable.PhoneNumberPicker_textSize, DEFAULT_TEXT_SIZE)
+            val defaultCountry =
+                getString(R.styleable.PhoneNumberPicker_defaultCountry) ?: DEFAULT_COUNTRY_KEY
+            val continents =
+                getInteger(R.styleable.PhoneNumberPicker_continents, DEFAULT_CONTINENT_KEY)
             val maxLength = getInteger(R.styleable.PhoneNumberPicker_maxLength, DEFAULT_MAX_LENGTH)
 
             mCountries = CountryFactory.onlyContinents(continents)
 
             binding.apply {
-                phoneNumber.filters = arrayOf(InputFilter.LengthFilter(maxLength))
                 phoneNumber.disableCopyPaste()
                 phoneNumber.setTextColor(textColor)
                 phoneNumber.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize.toFloat())
@@ -120,7 +136,7 @@ class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) : Li
     /**
      * Get the current country list
      */
-    val currentCountries : List<Country>
+    val currentCountries: List<Country>
         get() = mCountries
 
     /**
@@ -145,28 +161,32 @@ class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) : Li
 
             override fun onQueryTextSubmit(query: String?): Boolean {
 
-                if(query != null) {
+                if (query != null) {
 
-                    countriesAdapter.submitList(mCountries.filter { it.name.lowercase(Locale.ENGLISH)
-                        .contains(
-                        query.lowercase(
-                            Locale.ENGLISH
-                        )
-                    ) })
+                    countriesAdapter.submitList(mCountries.filter {
+                        it.name.lowercase(Locale.ENGLISH)
+                            .contains(
+                                query.lowercase(
+                                    Locale.ENGLISH
+                                )
+                            )
+                    })
                 }
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
 
-                if(newText != null) {
+                if (newText != null) {
 
-                    countriesAdapter.submitList(mCountries.filter { it.name.lowercase(Locale.ENGLISH)
-                        .contains(
-                        newText.lowercase(
-                            Locale.ENGLISH
-                        )
-                    ) })
+                    countriesAdapter.submitList(mCountries.filter {
+                        it.name.lowercase(Locale.ENGLISH)
+                            .contains(
+                                newText.lowercase(
+                                    Locale.ENGLISH
+                                )
+                            )
+                    })
                 }
                 return true
             }
@@ -195,7 +215,7 @@ class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) : Li
     /**
      * Prevent deletion on certain point to avoid country code getting wiped
      */
-    private fun preventDeletion(countryCode : String) {
+    private fun preventDeletion(countryCode: String) {
 
         binding.phoneNumber.apply {
             setOnKeyListener { _, keyCode, _ ->
@@ -222,9 +242,37 @@ class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) : Li
      * Render the selected country's flag + country code
      */
     private fun loadSelectedCountry() {
-
         binding.apply {
-            phoneNumberLayout.startIconDrawable = ContextCompat.getDrawable(context, loadCountryFlag(mSelectedCountry.resourceNameDrawable))
+            phoneNumberLayout.startIconDrawable = ContextCompat.getDrawable(
+                context,
+                loadCountryFlag(mSelectedCountry.resourceNameDrawable)
+            )
+            phoneNumber.removeTextChangedListener(textChangedListener)
+            val formattedNumber = numberUtils.formatPhoneNumber(
+                numberUtils.getExampleNumber(mSelectedCountry.iso2)
+            )
+            val pattern = CountryPattern.create(
+                formattedNumber.orEmpty()
+            )
+            textChangedListener = MaskedTextChangedListener.installOn(
+                phoneNumber,
+                pattern,
+                emptyList(),
+                AffinityCalculationStrategy.WHOLE_STRING,
+                object : MaskedTextChangedListener.ValueListener {
+                    override fun onTextChanged(
+                        maskFilled: Boolean,
+                        extractedValue: String,
+                        formattedValue: String
+                    ) {
+                        Log.i(
+                            "PHONE",
+                            "extractedValue = $extractedValue formattedValue = $formattedValue "
+                        )
+                        phoneChangCallback?.invoke(extractedValue)
+                    }
+                }
+            )
             phoneNumber.setText(mSelectedCountry.countryCodeFormatted)
         }
     }
@@ -232,7 +280,7 @@ class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) : Li
     /**
      * Get the drawable id of a given drawable name
      */
-    private fun loadCountryFlag(drawableName : String) =
+    private fun loadCountryFlag(drawableName: String) =
         context.resources.getIdentifier(drawableName, "drawable", context.packageName)
 
     /**
@@ -253,7 +301,7 @@ class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) : Li
      * app:continents="all|africa|asia|europe|north_america|south_america|oceania"
      *
      */
-    fun onlyContinents(vararg continents : Continent) {
+    fun onlyContinents(vararg continents: Continent) {
 
         mCountries = CountryFactory.onlyContinents(*continents)
     }
@@ -262,7 +310,7 @@ class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) : Li
      * Exclude certain countries by iso2 criteria,
      * Check [CountryFactory] to get ISO2s
      */
-    fun exceptCountries(vararg iso2s : String) {
+    fun exceptCountries(vararg iso2s: String) {
 
         mCountries = mCountries.filter {
             it.iso2 !in iso2s
@@ -280,7 +328,7 @@ class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) : Li
      * Change text color by a resource color,
      * XML attribute: app:textColor="@color/black"
      */
-    fun setTextColor(@ColorRes color : Int) {
+    fun setTextColor(@ColorRes color: Int) {
 
         binding.phoneNumber.setTextColor(
             ContextCompat.getColor(context, color)
@@ -292,7 +340,7 @@ class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) : Li
      * e.g: #FF0000 (Red color)
      * XML attribute: app:textColor="#FF0000"
      */
-    fun setTextColor(color : String) {
+    fun setTextColor(color: String) {
 
         binding.phoneNumber.setTextColor(Color.parseColor(color))
     }
@@ -301,7 +349,7 @@ class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) : Li
      * Change the outline border color of the TextInputLayout by resource color,
      * XML attribute: app:outlineBorderColor="@color/blue"
      */
-    fun setOutlineBorderColor(@ColorRes color : Int) {
+    fun setOutlineBorderColor(@ColorRes color: Int) {
 
         binding.phoneNumberLayout.boxStrokeColor = ContextCompat.getColor(context, color)
     }
@@ -311,7 +359,7 @@ class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) : Li
      * e.g: #0000FF (Blue color)
      * XML attribute: app:outlineBorderColor="#0000FF"
      */
-    fun setOutlineBorderColor(color : String) {
+    fun setOutlineBorderColor(color: String) {
 
         binding.phoneNumberLayout.boxStrokeColor = Color.parseColor(color)
     }
@@ -320,7 +368,7 @@ class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) : Li
      * Change text size, the used unit is PIXEL
      * XML attribute: app:textSize="18sp"
      */
-    fun setTextSize(size : Float) {
+    fun setTextSize(size: Float) {
 
         binding.phoneNumber.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
     }
@@ -330,7 +378,7 @@ class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) : Li
      * NB: In case the countries were filtered according to specific continents and the given flag wasn't there
      * the default flag would be the first country of the current country list
      */
-    fun setDefaultCountry(iso2 : String) {
+    fun setDefaultCountry(iso2: String) {
 
         mSelectedCountry = Country.byIso2(iso2, mCountries) ?: mCountries[0]
         loadSelectedCountry()
@@ -340,9 +388,21 @@ class PhoneNumberPicker(context: Context, private val attrs: AttributeSet?) : Li
      * To change max length of digits including the [+] digit!
      * XML attribute: app:maxLength="14"
      */
-    fun setMaxLength(maxLength : Int) {
+    fun setMaxLength(maxLength: Int) {
 
         binding.phoneNumber.filters = arrayOf(InputFilter.LengthFilter(maxLength))
+    }
+
+    fun setCustomBackground(@DrawableRes backId: Int) {
+        binding.phoneNumber.setBackgroundResource(backId)
+    }
+
+    fun setPhoneChangeCallback(callback: (String) -> Unit) {
+        phoneChangCallback = callback
+    }
+
+    fun removePhoneChangeCallback() {
+        phoneChangCallback = null
     }
 
     companion object {
