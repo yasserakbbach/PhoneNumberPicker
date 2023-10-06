@@ -15,15 +15,11 @@
         tools:startIconDrawable="@drawable/ic_country_flag_ma"
         app:startIconTint="@null">
 
-        <androidx.appcompat.widget.AppCompatEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/phone_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:maxLength="14"
-            android:longClickable="false"
-            android:textIsSelectable="false"
-            android:cursorVisible="false"
+            android:inputType="phone"
             tools:text="@string/morocco_country_code"/>
 
     </com.google.android.material.textfield.TextInputLayout>
